@@ -51,7 +51,11 @@ namespace fgi {
             m_mode = autoAcknowledge ? CMF::AUTO_ACKNOWLEDGE : CMF::CLIENT_ACKNOWLEDGE;
             m_connection = theConnection;
             m_connection->acquire();
-            m_session.reset( new cmf::TSession( theConnection->m_connection.createSession( isTransactional, m_mode ) ) );        
+#ifdef FGI_35
+            m_session.reset( new cmf::TSession( theConnection->m_connection.createSession( isTransactional, m_mode ) ) );
+#else        
+            m_session.reset( new cmf::TSession( theConnection->m_connection.createSession( isTransactional ) ) );      
+#endif
         }
 
         Session::~Session() {
